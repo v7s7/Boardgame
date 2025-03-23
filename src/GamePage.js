@@ -32,7 +32,7 @@ const gameData = {
             </p>
             <ul style={{ listStyle: "disc", paddingRight: "20px" }}>
               <p>١٥ بطاقة (من كل شخصية ٣ بطاقات)</p>
-              <p>٥٠ دينار</p>
+              <p>٥٠ دينار (عملات)</p>
             </ul>
           </div>
         ),
@@ -143,12 +143,11 @@ const GamePage = ({ addToCart }) => {
   ${gameId === "game2" ? "game2-bg" : ""}`}
     >
       <button
-  onClick={() => navigate(-1)}
-  className={`back-btn ${gameId === "game1" ? "back-btn-dark" : ""}`}
->
-  ← Back
-</button>
-
+        onClick={() => navigate(-1)}
+        className={`back-btn ${gameId === "game1" ? "back-btn-dark" : ""}`}
+      >
+        ← Back
+      </button>
 
       <h1>{game.name}</h1>
       <div className="cards-container">

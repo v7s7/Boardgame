@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import GamePage from "./GamePage";
@@ -6,19 +6,29 @@ import CartPage from "./CartPage";
 import Navbar from "./Navbar";
 
 function App() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const saved = localStorage.getItem("cart");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const addToCart = (newItem) => {
-    const existingIndex = cart.findIndex(
-      (item) => item.gameId === newItem.gameId && item.box.id === newItem.box.id
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const addToCart = (item) => {
+    const existing = cart.find(
+      (i) => i.gameId === item.gameId && i.box.id === item.box.id
     );
 
-    if (existingIndex !== -1) {
-      const updatedCart = [...cart];
-      updatedCart[existingIndex].quantity += 1;
-      setCart(updatedCart);
+    if (existing) {
+      const updated = cart.map((i) =>
+        i.gameId === item.gameId && i.box.id === item.box.id
+          ? { ...i, quantity: (i.quantity || 1) + 1 }
+          : i
+      );
+      setCart(updated);
     } else {
-      setCart([...cart, { ...newItem, quantity: 1 }]);
+      setCart([...cart, { ...item, quantity: 1 }]);
     }
   };
 
@@ -28,7 +38,7 @@ function App() {
     if (updatedCart[indexToRemove].quantity > 1) {
       updatedCart[indexToRemove].quantity -= 1;
     } else {
-      updatedCart.splice(indexToRemove, 1); // remove the item
+      updatedCart.splice(indexToRemove, 1);
     }
 
     setCart(updatedCart);
@@ -36,7 +46,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      <Navbar cart={cart} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route
