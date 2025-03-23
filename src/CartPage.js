@@ -14,14 +14,28 @@ const CartPage = ({ cart, removeFromCart }) => {
     (sum, item) => sum + item.box.price * item.quantity,
     0
   );
+  const shipping = 1.5;
+  const finalTotal = total + shipping;
 
-  const message = `السلام عليكم, طلبي هو:\n${cart
-    .map((item, i) => `${i + 1}. ${item.box.title} - ${item.box.price} BHD`)
-    .join("\n")}\n\nName: ${form.name}\nPhone: ${form.phone}\nAddress: ${
-    form.address
-  }\nNotes: ${form.notes}`;
+  const message = `السلام عليكم، طلبي هو:\n${cart
+    .map(
+      (item, i) =>
+        `${i + 1}. ${item.box.title} - ${item.box.price} BHD x${
+          item.quantity || 1
+        }`
+    )
+    .join("\n")}
+    
+  المجموع: ${total.toFixed(2)} BHD
+  التوصيل: ${shipping.toFixed(2)} BHD
+  الإجمالي: ${finalTotal.toFixed(2)} BHD
+  
+  الاسم: ${form.name}
+  رقم التواصل: ${form.phone}
+  العنوان: ${form.address}
+  ملاحظات: ${form.notes}`;
 
-  const whatsappLink = `https://wa.me/97332127686?text=${encodeURIComponent(
+  const whatsappLink = `https://wa.me/97339199749?text=${encodeURIComponent(
     message
   )}`;
   const navigate = useNavigate();
@@ -56,13 +70,15 @@ const CartPage = ({ cart, removeFromCart }) => {
             </div>
           ))}
 
-          <h2>Total: {total} BHD</h2>
+          <h5>Subtotal: {total.toFixed(2)} BHD</h5>
+          <h5>Shipping: {shipping.toFixed(2)} BHD</h5>
+          <h2>Total: {finalTotal.toFixed(2)} BHD</h2>
           <h3>Benefit Pay</h3>
           <p>
             <strong>IBAN:</strong> BH44BIBB00200003490666
           </p>
           <img
-            src="https://i.ibb.co/9H263tL8/URL-iban-BH44-BIBB00200003nt.png"
+            src="https://i.ibb.co/1fV5txDK/IMG-5690.jpg"
             alt="Bank Transfer QR"
             style={{
               width: "200px",
